@@ -1,2 +1,26 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+public class Solution {
+    String[] map = {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    public List<String> letterCombinations(String digits){
+        List<String> result = new ArrayList<>();
+        if(digits.equals(""))
+           return result;
+        else{
+           String cur = "";
+           helper(result, cur, digits, 0);
+        }
+        return result;
+    }    
+        void helper(List<String> result, String cur, String digits, int i){
+            if(i==digits.length())
+               result.add(cur);
+            else{
+                for(int j=0; j<map[digits.charAt(i)-'0'].length(); j++){
+                    cur=cur+(map[digits.charAt(i)-'0'].charAt(j));
+                    helper(result, cur, digits, i+1);
+                    cur=cur.substring(0, cur.length()-1);
+                }
+            }
+        }
+}
