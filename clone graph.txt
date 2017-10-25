@@ -1,0 +1,77 @@
+BFS
+/**
+ * Definition for undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+ * };
+ */
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if(node==null) return null;
+        Map<UndirectedGraphNode, UndirectedGraphNode> m=new HashMap<>();
+        
+        Queue<UndirectedGraphNode> q=new LinkedList<>();
+        Set<UndirectedGraphNode> visited=new HashSet<>();        
+                
+        q.offer(node);
+        visited.add(node);
+        
+        while(!q.isEmpty()){
+            UndirectedGraphNode n=q.poll();
+            UndirectedGraphNode new_node=new UndirectedGraphNode(n.label);
+            m.put(n, new_node);
+            
+            for(UndirectedGraphNode neighbor:n.neighbors){
+                if(!visited.contains(neighbor)){
+                    q.offer(neighbor);
+                    visited.add(neighbor);
+                }
+            }            
+        }
+        
+        for(Map.Entry<UndirectedGraphNode, UndirectedGraphNode>e:m.entrySet()){
+            UndirectedGraphNode origin=e.getKey();
+            UndirectedGraphNode copy=e.getValue();
+            for(UndirectedGraphNode n:origin.neighbors){
+                copy.neighbors.add(m.get(n));
+            }
+        }        
+        
+        return m.get(node);
+    }
+}
+
+DFS
+/**
+ * Definition for undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+ * };
+ */
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if(node==null) return null;
+        Map<UndirectedGraphNode, UndirectedGraphNode> m=new HashMap<>();
+               
+        helper(node, m);
+        
+        return m.get(node);
+    }
+    
+    public UndirectedGraphNode helper(UndirectedGraphNode node, Map<UndirectedGraphNode, UndirectedGraphNode> m){
+        if(m.containsKey(node))
+            return m.get(node);
+        
+        m.put(node, new UndirectedGraphNode(node.label));
+        
+        for(UndirectedGraphNode n:node.neighbors){
+            m.get(node).neighbors.add(helper(n, m));
+        }
+        
+        return m.get(node);
+    }
+}
