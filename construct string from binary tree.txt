@@ -1,3 +1,4 @@
+//Two solutions: traversal and divide and conquer
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -20,5 +21,56 @@ public class Solution {
         if(right==""&&left!="") return res+"("+left+")";
         
         return res+"("+left+")"+"("+right+")";        
+    }
+}
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public String tree2str(TreeNode t) {
+        StringBuilder sb=new StringBuilder();
+        if(t==null) return sb.toString();
+        helper(t, sb);
+        return sb.toString();
+    }
+    
+    public void helper(TreeNode t, StringBuilder sb){
+        
+        sb.append(t.val);
+        
+        if(t.left!=null){
+            sb.append("(");            
+            helper(t.left, sb);
+            sb.append(")");
+            
+            if(t.right!=null){
+                 sb.append("(");            
+                 helper(t.right, sb);
+                 sb.append(")");
+            }
+            
+        }
+        
+        else if(t.right!=null){
+            sb.append("()");
+            sb.append("("); 
+            helper(t.right, sb);
+            sb.append(")"); 
+        }
+        
+        else
+            return;
+      
+        //left is null, right is not null ()right
+        //both left and right are null
+        //left is not null, right is null (left)
+        
     }
 }
