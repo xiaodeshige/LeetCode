@@ -1,0 +1,42 @@
+class Solution {
+    public int calculate(String s) {
+        
+        int res=0;
+        int num=0;
+        
+        Stack<Integer> st=new Stack<>();
+        int sign=1;
+        
+        for(char c : s.toCharArray()){
+            if(c==' ') continue;
+            else if(c=='+'){
+                res=res+sign*num;
+                sign=1;
+                num=0;
+            }
+            else if(c=='-'){
+                res=res+sign*num;
+                sign=-1;
+                num=0;
+            }
+            else if(c=='('){
+                st.push(res);
+                st.push(sign);
+                sign=1;
+                res=0;
+            }
+            else if(c==')'){
+                res=res+num*sign;
+                num=0;
+                res=res*st.pop();
+                res=res+st.pop();
+            }
+            else if(Character.isDigit(c)){
+                num=num*10+c-'0';
+            }
+        }
+        
+        res=res+sign*num;
+        return res;
+    }
+}
