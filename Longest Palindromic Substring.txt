@@ -1,0 +1,84 @@
+class Solution {
+    public String longestPalindrome(String s) {/*
+        int n=s.length();
+        boolean[][] dp=new boolean[n][n];
+        int length=Integer.MIN_VALUE;
+        int start=0, end=0;
+        
+        for(int i=0; i<n; i++){
+            dp[i][i]=true;
+            if(length<1){
+                length=1;
+                start=i;
+                end=i+1;
+            }
+        }
+        
+        for(int i=0; i<n-1; i++){
+            if(s.charAt(i)==s.charAt(i+1)){
+                dp[i][i+1]=true;
+                if(length<2){
+                   length=2;
+                   start=i;
+                   end=i+2;
+                }
+            }
+        }
+        
+        for(int len=2; len<n; len++){
+            for(int i=0; i<n-len; i++){
+                if(dp[i+1][i+len-1]==true&&s.charAt(i)==s.charAt(i+len)){
+                    dp[i][i+len]=true;
+                    if(length<len+1){
+                       length=len+1;
+                       start=i;
+                       end=i+len+1;
+                    }
+                }
+            }
+        }
+        
+        return s.substring(start, end);
+    }*/
+         if (s == null || s.length() == 0) {
+            return "";
+        }
+        
+        int length = s.length();    
+        int maxLength = 0;
+        int start=0;
+        int end=0;
+        
+        for(int i = 1; i <length; i++){
+            
+            int low=i-1;
+            int high=i;
+            
+            while(low>= 0&&high<length &&s.charAt(low)==s.charAt(high)){ 
+                 if (high - low + 1 > maxLength) {
+                     start = low;
+                     end=high;
+                     maxLength = high - low + 1;
+                }
+                low--;
+                high++;
+            }
+            
+            low=i-1;
+            high=i+1;
+            
+            while(low>= 0&&high<length &&s.charAt(low)==s.charAt(high)){ 
+                 if (high - low + 1 > maxLength) {
+                     start = low;
+                     end=high;
+                     maxLength = high - low + 1;
+                }
+                low--;
+                high++;
+            }           
+            
+        }
+        
+        return s.substring(start, end+1);
+    }   
+}
