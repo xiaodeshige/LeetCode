@@ -1,0 +1,28 @@
+public class Solution {
+    String[] map = {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    public List<String> letterCombinations(String digits){
+        List<String> result = new ArrayList<>();
+        if(digits.equals(""))
+           return result;
+        else{
+           String cur = "";
+           helper(result, cur, digits, 0);
+        }
+        return result;
+    }    
+    public void helper(List<String> result, String cur, String digits, int index){
+        if(cur.length()==digits.length()){
+            result.add(cur);
+            return;
+        }
+        
+        for(int i=index; i<digits.length(); i++){
+            int c=digits.charAt(i)-'0';
+            for(int j=0; j<map[c].length(); j++){
+                cur=cur+map[c].charAt(j);
+                helper(result, cur, digits, i+1);
+                cur=cur.substring(0, cur.length()-1);                
+            }            
+        }            
+    }
+}
