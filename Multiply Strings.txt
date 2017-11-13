@@ -8,10 +8,11 @@ public class Solution {
                 int mul = (num1.charAt(j)-'0')*(num2.charAt(i)-'0');
                 int p1=i+j;
                 int p2=i+j+1;
-                
+                ```
                 int sum=mul+pos[p2];
                 pos[p1]=pos[p1]+sum/10;
                 pos[p2]=sum%10;
+                ```
             }
         }
         
