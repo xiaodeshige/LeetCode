@@ -1,0 +1,48 @@
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        Map<Character, Integer> m=new HashMap<>();
+        for(char c:tasks){
+            if(!m.containsKey(c)){
+                m.put(c,1);
+            }
+            else{
+                m.put(c, m.get(c)+1);
+            }
+        }
+        
+        PriorityQueue<Map.Entry<Character, Integer>> pq=new PriorityQueue<>(
+            new Comparator<Map.Entry<Character, Integer>>(){
+                public int compare(Map.Entry<Character, Integer> e1, Map.Entry<Character, Integer> e2){                    
+                    return e2.getValue()-e1.getValue()==0?e1.getKey()-e2.getKey():e2.getValue()-e1.getValue();
+                }
+            }
+        );
+        
+        pq.addAll(m.entrySet());
+        int count=0;
+        
+        while(!pq.isEmpty()){
+           
+            int idle=n+1;
+            List<Map.Entry<Character, Integer>> l=new ArrayList<>();
+            
+            while(idle>0&&!pq.isEmpty()){
+                Map.Entry<Character, Integer> e=pq.poll();
+                e.setValue(e.getValue()-1);                
+                l.add(e);
+                idle--;
+                count++;
+            }
+            
+            for(Map.Entry<Character, Integer> e:l){
+                if(e.getValue()>0)
+                    pq.offer(e);
+            }
+            
+            if (pq.isEmpty()) break;
+            if(idle>0) count+=idle;
+        }
+        
+        return count;
+    }
+}

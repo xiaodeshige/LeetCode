@@ -1,0 +1,36 @@
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) { 
+        int[] hashp=new int[256];
+        int[] hashs=new int[256];
+        
+        List<Integer> res=new ArrayList<>();
+        if (s == null || s.length() == 0 || p == null || p.length() == 0||s.length()<p.length()) return res;
+        
+        for(char c:p.toCharArray()){
+            hashp[c]++;;
+        }
+        
+        for(int i=0; i<p.length(); i++){
+            hashs[s.charAt(i)]++;
+        }
+        
+        if(isSame(hashp, hashs))
+            res.add(0);
+        
+        for(int i=p.length(); i<s.length(); i++){
+            hashs[s.charAt(i)]++;
+            hashs[s.charAt(i-p.length())]--;
+            if(isSame(hashp, hashs))
+               res.add(i-p.length()+1);
+        }
+        return res;
+    }
+    
+    public boolean isSame(int[] hashp, int[] hashs){
+        for(int i=0; i<hashp.length; i++){
+            if(hashp[i]!=hashs[i])
+                return false;
+        }
+        return true;
+    }
+}

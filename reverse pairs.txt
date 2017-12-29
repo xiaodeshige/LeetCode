@@ -1,0 +1,61 @@
+//Use merge sort
+class Solution {
+    int[] helper;
+    
+    public int reversePairs(int[] nums) {
+        this.helper=new int[nums.length];
+        return mergeSort(nums, 0, nums.length-1);        
+    }
+    
+    public int mergeSort(int[] nums, int l, int r){
+        if(l>=r) return 0;
+        
+        int mid=l+(r-l)/2;
+        
+        int cnt=mergeSort(nums, l, mid)+mergeSort(nums, mid+1, r);
+        
+        for(int i=l, j=mid+1; i<=mid; i++){
+            while(j<=r&&nums[i]/2.0>nums[j]){
+                j++;
+            }
+            cnt=cnt+j-(mid+1);
+        }
+        
+        merge(nums, l, mid, r);
+        
+        return cnt;
+    }
+    
+    public void merge(int[] nums, int l, int mid, int r){
+        int i=l, j=mid+1;
+        int k=l;
+        
+        while(i<=mid&&j<=r){
+            if(nums[i]<=nums[j]){
+                helper[k]=nums[i];
+                i++;
+            }
+            else{
+                helper[k]=nums[j];
+                j++;
+            }
+            k++;
+        }
+        
+        while(i<=mid){
+            helper[k]=nums[i];
+            k++;
+            i++;
+        }
+        
+        while(j<=r){
+            helper[k]=nums[j];
+            k++;
+            j++;
+        }
+        
+        for(int d=l; d<=r; d++)
+            nums[d]=helper[d];        
+    } 
+        
+}

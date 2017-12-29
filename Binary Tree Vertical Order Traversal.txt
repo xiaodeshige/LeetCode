@@ -1,0 +1,63 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Pair{
+    TreeNode root;
+    int index;
+    public Pair(TreeNode root, int index){
+        this.root=root;
+        this.index=index;
+    }
+}
+
+public class Solution {
+    public List<List<Integer>> verticalOrder(TreeNode root) {
+        List<List<Integer>> res=new ArrayList<>();
+        if(root==null) return res;
+        
+        Queue<Pair> q=new LinkedList<>();
+        q.offer(new Pair(root, 0));
+        Map<Integer, List<Integer>> m=new HashMap<>();
+        m.put(0, new ArrayList<>());
+        m.get(0).add(root.val);
+        int low=0, high=0;
+        
+        while(!q.isEmpty()){
+            Pair p=q.poll();
+            if(p.root.left!=null){
+                q.offer(new Pair(p.root.left, p.index-1));
+                if(m.containsKey(p.index-1)){
+                    m.get(p.index-1).add(p.root.left.val);
+                }
+                else{
+                    m.put(p.index-1, new ArrayList<>());
+                    m.get(p.index-1).add(p.root.left.val);
+                }
+                low=Math.min(low, p.index-1);
+            }
+            if(p.root.right!=null){
+                q.offer(new Pair(p.root.right, p.index+1));
+                if(m.containsKey(p.index+1)){
+                    m.get(p.index+1).add(p.root.right.val);
+                }
+                else{
+                    m.put(p.index+1, new ArrayList<>());
+                    m.get(p.index+1).add(p.root.right.val);
+                }
+                high=Math.max(high, p.index+1);
+            }
+        }       
+        
+        for(int i=low; i<=high; i++){
+            res.add(m.get(i));
+        }
+        
+        return res;
+    }
+}

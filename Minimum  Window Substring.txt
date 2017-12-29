@@ -1,0 +1,47 @@
+public class Solution {
+    public String minWindow(String s, String t) {
+        int[] sourceHash=new int[256];
+        int[] targetHash=new int[256];
+        
+        initTargetHash(t, targetHash);
+        
+        int i=0, j=0, ans=Integer.MAX_VALUE;; 
+        String res="";
+        
+        for(i=0; i<s.length(); i++)
+        //???   
+            while(!isValid(sourceHash, targetHash)&&j<s.length()){
+            //???
+                sourceHash[s.charAt(j)]++;
+                if(j<s.length())
+                   j++;
+                else
+                   break;
+            }
+            
+            if(isValid(sourceHash, targetHash)){
+                if(j-i<ans){
+                    ans=j-i;
+                    res=s.substring(i, j);
+                }                
+            }
+            
+            sourceHash[s.charAt(i)]--;
+        }
+        return res;
+    }
+    
+    public boolean isValid(int[] sourceHash, int[] targetHash){
+        for(int i=0; i<256; i++){
+            //source??target
+            if(targetHash[i]>sourceHash[i]) return false;
+        }
+        return true;
+    }
+    
+    public void initTargetHash(String t, int[] targetHash){
+        for(int i=0; i<t.length(); i++){
+            targetHash[t.charAt(i)]++;
+        }
+    }
+}

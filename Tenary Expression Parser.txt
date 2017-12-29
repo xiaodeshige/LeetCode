@@ -1,0 +1,57 @@
+//dfs
+class Solution {
+    public String parseTernary(String expression) {
+        char[] a=expression.toCharArray();
+        return dfs(a, 0, a.length-1)+"";
+    }
+    
+    public char dfs(char[] a, int begin, int end){
+        if(begin==end) return a[begin];
+        
+        int count=0;
+        int i=begin;
+        for(; i<=end; i++){
+            if(a[i]=='?') count++;
+            else if(a[i]==':'){
+                count--;
+                if(count==0) break;
+            }
+        }
+        
+        if(a[begin]=='T') return dfs(a, begin+2, i-1);
+        else return dfs(a, i+1, end);
+    }
+}
+
+//stack solution
+class Solution {
+    public String parseTernary(String expression) {
+        Stack<Character> st=new Stack<>();
+        int len=expression.length();
+        
+        for(int i=len-1; i>=0; i--){
+            char c=expression.charAt(i);
+            
+            if(!st.empty()&&st.peek()=='?'){
+                st.pop();
+                
+                char first=st.pop();
+                st.pop();
+                char second=st.pop();
+                
+                if(c=='T')
+                    st.push(first);
+                else
+                    st.push(second);                
+            }  
+            else
+                st.push(c);
+        }
+        
+        return String.valueOf(st.peek());
+        
+    }
+}
+
+//Test Case
+T?T?6:7:T?T?5:3:T?T?3:1:F
