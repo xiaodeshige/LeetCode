@@ -1,0 +1,79 @@
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+class Pair{
+    int a;
+    int b;
+    public Pair(int a, int b){
+        this.a=a;
+        this.b=b;
+    }
+    
+    public boolean equals(Object o){
+        if(o==this) return true;
+        if(!(o instanceof Pair)) return false;
+        Pair p=(Pair)o;
+        return (a==p.a&&b==p.b);
+    }
+    
+    public int hashCode(){
+        int result=17;
+        result=31*result+a;
+        result=31*result+b;
+        return result;
+    }
+}
+public class Solution {
+    public int maxPoints(Point[] points) {
+        if(points==null) return 0;
+        if(points.length<=2) return points.length;
+        Map<Pair, Integer> slopeMap=new HashMap<>();
+        int samePoint=0, curMax=0;
+        int globalMax=0;        
+        for(int i=0; i<points.length; i++){
+            samePoint=0; curMax=0; 
+            Point p=points[i];
+            samePoint=0;
+            int x0=p.x;
+            int y0=p.y;           
+            for(int j=i+1; j<points.length; j++){
+                Point cmp=points[j];                
+                int x1=cmp.x;
+                int y1=cmp.y;
+                if(x0==x1&&y0==y1)
+                    samePoint++;               
+                else{
+                    int xdiff=x1-x0;
+                    int ydiff=y1-y0;
+                    int gcd=find_gcd(xdiff, ydiff);
+                    xdiff/=gcd;
+                    ydiff/=gcd;
+                    Pair pair=new Pair(xdiff, ydiff);
+                    if(slopeMap.containsKey(pair)){
+                        slopeMap.put(pair, slopeMap.get(pair)+1);
+                    }
+                    else{
+                        slopeMap.put(pair, 1);
+                    }
+                    curMax=Math.max(slopeMap.get(pair), curMax);
+                }    
+            }
+            slopeMap.clear();
+            globalMax=Math.max(globalMax, curMax+samePoint+1);
+        }
+        return globalMax;
+    }
+    
+    public int find_gcd(int a, int b){
+        if(b==0)
+            return a;
+        else
+            return find_gcd(b, a%b);
+    }
+}
