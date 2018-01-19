@@ -1,0 +1,70 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        /*PriorityQueue<ListNode> pq=new PriorityQueue<>(new Comparator<ListNode>(){
+            public int compare(ListNode a, ListNode b){
+                return a.val-b.val;
+            }
+        });
+        
+        for(ListNode node:lists){
+            if(node!=null)
+                pq.offer(node);
+        }
+        
+        ListNode dummy=new ListNode(0);
+        ListNode p=dummy;
+        while(!pq.isEmpty()){
+            ListNode node=pq.poll();
+            ListNode temp=new ListNode(node.val);
+            p.next=temp;
+            p=p.next;
+            if(node.next!=null){
+                pq.offer(node.next);
+            }
+        }
+        
+        return dummy.next;*/
+        if(lists.length==0) return null;
+        return helper(lists, 0, lists.length-1);
+    }
+    
+    public ListNode helper(ListNode[] lists, int start, int end){
+        if(start==end) return lists[start];
+        int mid=start+(end-start)/2;
+        ListNode left=helper(lists, start, mid);
+        ListNode right=helper(lists, mid+1, end);
+        return merge(left, right);
+    }
+    
+    public ListNode merge(ListNode nodeA, ListNode nodeB){
+        ListNode dummy=new ListNode(0);
+        ListNode p=dummy;
+        while(nodeA!=null&&nodeB!=null){
+            if(nodeA.val<nodeB.val){
+                ListNode temp=new ListNode(nodeA.val);
+                nodeA=nodeA.next;
+                p.next=temp;
+                p=p.next;
+            }
+            else{
+                ListNode temp=new ListNode(nodeB.val);
+                nodeB=nodeB.next;
+                p.next=temp;
+                p=p.next;
+            }
+        }
+        if(nodeA!=null)
+            p.next=nodeA;
+        if(nodeB!=null)
+            p.next=nodeB;
+        return dummy.next;
+    }
+}
