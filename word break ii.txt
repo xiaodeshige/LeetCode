@@ -1,0 +1,49 @@
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        List<String> res=new ArrayList<>();
+        int n=s.length();
+        boolean[] canStart=new boolean[n+1];
+        boolean[][] dp=new boolean[n][n];
+        for(int i=0; i<n; i++){
+            for(int j=i; j<n; j++){
+                if(wordDict.contains(s.substring(i, j+1)))
+                    dp[i][j]=true;
+            }
+        }
+        
+        canStart[n]=true;
+        for(int i=n-1; i>=0; i--){
+            for(int j=i+1; j<=n; j++){
+                if(dp[i][j-1]&&canStart[j]){
+                    canStart[i]=true;
+                    break;
+                }
+            }
+        }
+        helper(res, "", wordDict, new ArrayList<>(), dp, canStart, s, 0);
+        return res;
+    }
+    
+    public void helper(List<String> res, String path, List<String> wordDict, List<Integer> l, boolean[][] dp, boolean[] canStart, String s, int start){
+        if(!canStart[start]) return;
+        if(start==s.length()) {
+            StringBuilder sb=new StringBuilder();
+            int lastIndex=0;
+            for(int i=0; i<l.size(); i++){
+                sb.append(s.substring(lastIndex, l.get(i)));
+                if(i!=l.size()-1)
+                    sb.append(" ");
+                lastIndex=l.get(i);
+            }
+            res.add(sb.toString());
+            return;
+        }
+        for(int i=start; i<s.length(); i++){
+            if(dp[start][i]){
+                l.add(i+1);
+                helper(res, path, wordDict, l, dp, canStart, s, i+1);
+                l.remove(l.size()-1);
+            }
+        }
+    }
+}
